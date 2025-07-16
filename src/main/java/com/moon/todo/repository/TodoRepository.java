@@ -3,6 +3,7 @@ package com.moon.todo.repository;
 
 import com.moon.todo.domain.Todo;
 import com.moon.todo.domain.User;
+import com.moon.todo.domain.enums.EisenhowerType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -18,4 +19,6 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     // 사용자 + 완료 여부 기준 (필요시 사용 가능)
     List<Todo> findAllByUserAndCompleted(User user, boolean completed);
+
+    List<Todo> findAllByUserAndPriority(User user, EisenhowerType priority);
 }

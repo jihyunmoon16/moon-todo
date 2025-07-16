@@ -1,5 +1,6 @@
 package com.moon.todo.domain;
 
+import com.moon.todo.domain.enums.EisenhowerType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,10 @@ public class Todo {
     // 할 일 제목
     @Column(nullable = false, length = 255)
     private String title;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EisenhowerType priority;
 
     // 선택사항: 할 일 설명
     @Column(columnDefinition = "TEXT")

@@ -2,6 +2,7 @@ package com.moon.todo.service;
 
 import com.moon.todo.domain.Todo;
 import com.moon.todo.domain.User;
+import com.moon.todo.domain.enums.EisenhowerType;
 import com.moon.todo.dto.todo.TodoRequest;
 import com.moon.todo.dto.todo.TodoResponse;
 import com.moon.todo.repository.TodoRepository;
@@ -10,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -21,7 +24,6 @@ public class TodoService {
 
     private final TodoRepository todoRepository;
 
-    // 1. 할 일 생성
     public TodoResponse createTodo(User user, TodoRequest request) {
         Todo todo = Todo.builder()
                 .user(user)
@@ -36,22 +38,21 @@ public class TodoService {
         return TodoResponse.from(todo);
     }
 
-    // 2. 할 일 목록 조회 (해당 사용자, 선택적 날짜 필터)
     public List<TodoResponse> getTodos(User user, LocalDate date) {
         List<Todo> todos = (date == null)
                 ? todoRepository.findAllByUser(user)
                 : todoRepository.findAllByUserAndDueDate(user, date);
 
+        todos.sort(Comparator.comparingInt(todo -> todo.getPriority().getOrder()));
+
         return todos.stream().map(TodoResponse::from).collect(toList());
     }
 
-    // 3. 할 일 단건 조회
     public TodoResponse getTodoById(User user, Long todoId) {
         Todo todo = findUserTodoOrThrow(user, todoId);
         return TodoResponse.from(todo);
     }
 
-    // 4. 할 일 수정
     public TodoResponse updateTodo(User user, Long id, TodoRequest request) {
         Todo todo = findUserTodoOrThrow(user, id);
 
@@ -63,24 +64,26 @@ public class TodoService {
         return TodoResponse.from(todoRepository.save(todo));
     }
 
-    // 5. 삭제
     public void deleteTodo(User user, Long id) {
         Todo todo = findUserTodoOrThrow(user, id);
         todoRepository.delete(todo);
     }
 
-    // 6. 완료 상태 토글
     public void toggleComplete(User user, Long id) {
         Todo todo = findUserTodoOrThrow(user, id);
         todo.setCompleted(!todo.isCompleted());
         todoRepository.save(todo);
     }
 
-    // 7. 뽀모도로 시간 누적 (예: 25분)
     public void addPomodoroTime(User user, Long id, int minutes) {
         Todo todo = findUserTodoOrThrow(user, id);
         todo.setPomodoroMinutes(todo.getPomodoroMinutes() + minutes);
         todoRepository.save(todo);
+    }
+
+    public List<TodoResponse> getTodosByPriority(User user, EisenhowerType priority) {
+        return todoRepository.findAllByUserAndPriority(user, priority)
+                .stream().map(TodoResponse::from).collect(Collectors.toList());
     }
 
     // 공통 유틸: 사용자 소유 확인

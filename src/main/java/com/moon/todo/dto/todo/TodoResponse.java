@@ -1,6 +1,7 @@
 package com.moon.todo.dto.todo;
 
 import com.moon.todo.domain.Todo;
+import com.moon.todo.domain.enums.EisenhowerType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class TodoResponse {
     private String tag;
     private boolean completed;
     private int pomodoroMinutes;
+    private EisenhowerType priority;
 
     public static TodoResponse from(Todo todo) {
         return TodoResponse.builder()
@@ -26,6 +28,7 @@ public class TodoResponse {
                 .tag(todo.getTag())
                 .completed(todo.isCompleted())
                 .pomodoroMinutes(todo.getPomodoroMinutes())
+                .priority(todo.getPriority())
                 .build();
     }
 }
