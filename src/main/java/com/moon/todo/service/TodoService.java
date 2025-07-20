@@ -39,10 +39,10 @@ public class TodoService {
         return TodoResponse.from(todo);
     }
 
-    public List<TodoResponse> getTodos(User user, LocalDate date) {
-        List<Todo> todos = (date == null)
+    public List<TodoResponse> getTodos(User user, Boolean completed) {
+        List<Todo> todos = (completed == null)
                 ? todoRepository.findAllByUser(user)
-                : todoRepository.findAllByUserAndDueDate(user, date);
+                : todoRepository.findAllByUserAndCompleted(user, completed);
 
         todos.sort(Comparator.comparingInt(todo -> todo.getPriority().getOrder()));
 

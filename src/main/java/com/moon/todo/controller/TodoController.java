@@ -35,10 +35,9 @@ public class TodoController {
     @GetMapping
     public ResponseEntity<List<TodoResponse>> getTodos(
             @AuthenticationPrincipal User user,
-            @RequestParam(value = "date", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam(required = false) Boolean completed
     ) {
-        return ResponseEntity.ok(todoService.getTodos(user, date));
+        return ResponseEntity.ok(todoService.getTodos(user, completed));
     }
 
 
