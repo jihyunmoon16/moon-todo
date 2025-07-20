@@ -30,6 +30,7 @@ public class TodoService {
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .dueDate(request.getDueDate())
+                .priority(request.getPriority())
                 .tag(request.getTag())
                 .completed(false)
                 .pomodoroMinutes(0)

@@ -26,7 +26,7 @@ public class Todo {
     private User user;
 
     // 할 일 제목
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String title;
 
     @Enumerated(EnumType.STRING)
