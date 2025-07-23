@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,9 +39,7 @@ public class TodoService {
     }
 
     public List<TodoResponse> getTodos(User user, Boolean completed) {
-        List<Todo> todos = (completed == null)
-                ? todoRepository.findAllByUser(user)
-                : todoRepository.findAllByUserAndCompleted(user, completed);
+        List<Todo> todos = todoRepository.findAllByUserAndCompleted(user, completed);
 
         todos.sort(Comparator.comparingInt(todo -> todo.getPriority().getOrder()));
 

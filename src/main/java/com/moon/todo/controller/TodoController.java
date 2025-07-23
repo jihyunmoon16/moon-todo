@@ -7,12 +7,10 @@ import com.moon.todo.dto.todo.TodoRequest;
 import com.moon.todo.dto.todo.TodoResponse;
 import com.moon.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,7 +33,7 @@ public class TodoController {
     @GetMapping
     public ResponseEntity<List<TodoResponse>> getTodos(
             @AuthenticationPrincipal User user,
-            @RequestParam(required = false) Boolean completed
+            @RequestParam(required = false, defaultValue = "false") Boolean completed
     ) {
         return ResponseEntity.ok(todoService.getTodos(user, completed));
     }
